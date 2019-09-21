@@ -115,7 +115,7 @@ class HandlerClass:
                     '#CUT_VOLTS          = \n'\
                     '#PAUSE_AT_END       = \n'\
                     '\n')
-            print('*** creating new material configuration file, {}'.format(self.materialFile))
+            print(('*** creating new material configuration file, {}'.format(self.materialFile)))
 
     def write_material(self, *items):
         mat = []
@@ -218,7 +218,7 @@ class HandlerClass:
                         self.dialog_error('Materials Error', '\n{} is missing from Material #{}'.format(item, t_number))
         self.builder.get_object('material').set_active(0)
         self.materialList = []
-        for material in (self.materialFileDict.keys()):
+        for material in (list(self.materialFileDict.keys())):
             self.materialList.append(material)
         self.getMaterial = 0
 
@@ -433,7 +433,7 @@ class HandlerClass:
         self.builder.get_object('y-single-cut').update()
         x = self.builder.get_object('x-single-cut').get_value()
         y = self.builder.get_object('y-single-cut').get_value()
-        if x <> 0 or y <> 0:
+        if x != 0 or y != 0:
             self.s.poll()
             if not self.s.estop and self.s.enabled and self.s.homed.count(1) == self.s.joints and self.s.interp_state == linuxcnc.INTERP_IDLE:
                 self.c.mode(linuxcnc.MODE_MDI)
@@ -542,7 +542,7 @@ class HandlerClass:
                             (item, theme) = line.strip().replace(" ", "").split('=')
             except:
                 self.dialog_error('Configuration Error', 'Preferences file, {} is invalid ***'.format(self.prefFile))
-                print('*** preferences file, {} is invalid ***'.format(self.prefFile))
+                print(('*** preferences file, {} is invalid ***'.format(self.prefFile)))
         else:
             theme = self.i.find('PLASMAC', 'THEME') or gtk.settings_get_default().get_property('gtk-theme-name')
             font = self.i.find('PLASMAC', 'FONT') or gtk.settings_get_default().get_property('gtk-font-name')
@@ -582,7 +582,7 @@ class HandlerClass:
                                     tmpDict[key] = value
             except:
                 self.dialog_error('Configuration Error', 'The plasmac configuration file, {} is invalid ***'.format(self.configFile))
-                print('*** plasmac configuration file, {} is invalid ***'.format(self.configFile))
+                print(('*** plasmac configuration file, {} is invalid ***'.format(self.configFile)))
             for item in self.configDict:
                 if item == 'material':
                     self.builder.get_object(item).set_active(0)
@@ -592,18 +592,18 @@ class HandlerClass:
                     if item in tmpDict:
                         self.builder.get_object(item).set_value(float(self.configDict.get(item)))
                     else:
-                        print('*** {} missing from {}'.format(item,self.configFile))
+                        print(('*** {} missing from {}'.format(item,self.configFile)))
                 elif isinstance(self.builder.get_object(item), gladevcp.hal_widgets.HAL_CheckButton):
                     if item in tmpDict:
                         self.builder.get_object(item).set_active(int(self.configDict.get(item)))
                     else:
-                        print('*** {} missing from {}'.format(item,self.configFile))
+                        print(('*** {} missing from {}'.format(item,self.configFile)))
             if convertFile:
-                print('*** converting {} to new format'.format(self.configFile))
+                print(('*** converting {} to new format'.format(self.configFile)))
                 self.save_settings()
         else:
             self.save_settings()
-            print('*** creating new run tab configuration file, {}'.format(self.configFile))
+            print(('*** creating new run tab configuration file, {}'.format(self.configFile)))
 
     def save_settings(self):
         material = hal.get_value('plasmac_run.material-change-number')
@@ -612,7 +612,7 @@ class HandlerClass:
             try:
                 with open(self.configFile, 'w') as f_out:
                     f_out.write('#plasmac run tab/panel configuration file, format is:\n#name = value\n\n')
-                    for key in sorted(self.configDict.iterkeys()):
+                    for key in sorted(self.configDict.keys()):
                         if key == 'material-number': # or key == 'kerf-width':
                             pass
                         elif isinstance(self.builder.get_object(key), gladevcp.hal_widgets.HAL_SpinButton):
@@ -627,9 +627,9 @@ class HandlerClass:
                             f_out.write(key + '=' + str(value) + '\n')
             except:
                 self.dialog_error('Error opening {}'.format(self.configFile))
-                print('*** error opening {}'.format(self.configFile))
+                print(('*** error opening {}'.format(self.configFile)))
         else:
-            for key in sorted(self.configDict.iterkeys()):
+            for key in sorted(self.configDict.keys()):
                 if isinstance(self.builder.get_object(key), gladevcp.hal_widgets.HAL_SpinButton):
                     self.builder.get_object(key).update()
             shutil.copy(self.materialFile,'{}.tmp'.format(self.materialFile))
@@ -731,7 +731,7 @@ class HandlerClass:
 
     def idle_changed(self, halpin):
         if not halpin.get():
-            for key in sorted(self.configDict.iterkeys()):
+            for key in sorted(self.configDict.keys()):
                 if isinstance(self.builder.get_object(key), gladevcp.hal_widgets.HAL_SpinButton):
                     self.builder.get_object(key).update()
 

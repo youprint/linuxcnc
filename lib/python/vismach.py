@@ -14,7 +14,7 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-import rs274.OpenGLTk, Tkinter, signal, hal
+import rs274.OpenGLTk, tkinter, signal, hal
 from minigl import *
 from math import *
 import glnav
@@ -155,7 +155,7 @@ class Track(Collection):
 	#make sure we have something to work with first
 	if (self.world2view.t == []):
 		#something's borkled - give up
-		print "vismach.py: Track: why am i here? world is not in the scene yet"
+		print("vismach.py: Track: why am i here? world is not in the scene yet")
 		glPushMatrix()
 		return
 	
@@ -192,7 +192,7 @@ class CoordsBase(object):
 	self.q = gluNewQuadric()
 
     def coords(self):
-	return map(self._coord, self._coords)
+	return list(map(self._coord, self._coords))
 
     def _coord(self, v):
 	if isinstance(v, str): return self.comp[v]
@@ -909,11 +909,11 @@ class AsciiSTL:
         for line in data:
             if line.find("normal") != -1:
                 line = line.split()
-                x, y, z = map(float, line[-3:])
+                x, y, z = list(map(float, line[-3:]))
                 n = [x,y,z] 
             elif line.find("vertex") != -1:
                 line = line.split()
-                x, y, z = map(float, line[-3:])
+                x, y, z = list(map(float, line[-3:]))
                 t.append([x,y,z])
                 if len(t) == 3:
                     if n == [0,0,0]:
@@ -1006,7 +1006,7 @@ class AsciiOBJ:
 old_plotclear = False
 
 def main(model, tool, work, size=10, hud=0, rotation_vectors=None, lat=0, lon=0):
-    app = Tkinter.Tk()
+    app = tkinter.Tk()
 
     t = O(app, double=1, depth=1)
     # set which axes to rotate around
