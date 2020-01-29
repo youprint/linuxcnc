@@ -70,7 +70,11 @@ if os == 'linux':
     distributor = subprocess.Popen(['lsb_release', '--id', '--short'], stdout=subprocess.PIPE).communicate()[0][:-1]
 
     release = subprocess.Popen(['lsb_release', '--release', '--short'], stdout=subprocess.PIPE).communicate()[0][:-1]
-    major, minor = re.split('\.', release)
+    try:
+        major, minor = re.split('\.', release)
+    except ValueError as e:
+        major = release
+        minor = "0"
     release_major = int(major)
     release_minor = int(minor)
 
