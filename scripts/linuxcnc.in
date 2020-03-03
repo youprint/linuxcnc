@@ -818,6 +818,8 @@ else
     done
 fi
 
+haltcl $HALLIB_DIR/command-deriv-check.tcl
+
 # 4.3.7. execute discrete HAL commands from ini file (if any)
 # get first command from ini file
 NUM=1
