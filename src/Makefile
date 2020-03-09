@@ -992,13 +992,59 @@ lineardeltakins-objs := emc/kinematics/lineardeltakins.o
 
 obj-m += genhexkins.o
 genhexkins-objs := emc/kinematics/genhexkins.o
+genhexkins-objs += emc/kinematics/genhexfuncs.o
 genhexkins-objs += libnml/posemath/_posemath.o
 genhexkins-objs += libnml/posemath/sincos.o $(MATHSTUB)
 
+obj-m += genhex-switchkins.o
+genhex-switchkins-objs := emc/kinematics/genhex-switchkins.o
+#genhex-switchkins-objs += emc/motion/motion.o
+genhex-switchkins-objs += emc/kinematics/genhexfuncs.o
+genhex-switchkins-objs += libnml/posemath/_posemath.o
+genhex-switchkins-objs += libnml/posemath/sincos.o $(MATHSTUB)
+genhex-switchkins-objs += emc/kinematics/kins_util.o
+ifeq ($(origin user_genhex_type2), undefined)
+  # use template:
+  genhex-switchkins-objs += emc/kinematics/switchtype2funcs.o
+else
+  # user specified file for switchkins_type==2:
+  # works with rtpreempt only (not rtai)
+  ifeq ("$(wildcard $(user_genhex_type2))","")
+    $(error No such file: $(user_xyzbc_type2))
+  endif
+  $(shell touch $(user_genhex_type2))
+  userfile = $(subst .c,.o,$(user_genhex_type2))
+  genhex-switchkins-objs += $(userfile)
+  $(info !!!genhex-switchkins:user_genhex_type2=$(userfile))
+endif
+
 obj-m += genserkins.o
 genserkins-objs := emc/kinematics/genserkins.o
+genserkins-objs += emc/kinematics/genserfuncs.o
 genserkins-objs += libnml/posemath/gomath.o
 genserkins-objs += libnml/posemath/sincos.o $(MATHSTUB)
+
+obj-m += genser-switchkins.o
+genser-switchkins-objs := emc/kinematics/genser-switchkins.o
+genser-switchkins-objs += emc/kinematics/genserfuncs.o
+genser-switchkins-objs += libnml/posemath/gomath.o
+genser-switchkins-objs += libnml/posemath/sincos.o $(MATHSTUB)
+genser-switchkins-objs += emc/kinematics/kins_util.o
+ifeq ($(origin user_genser_type2), undefined)
+  # use template:
+  genser-switchkins-objs += emc/kinematics/switchtype2funcs.o
+else
+  # user specified file for switchkins_type==2:
+  # works with rtpreempt only (not rtai)
+  ifeq ("$(wildcard $(user_genser_type2))","")
+    $(error No such file: $(user_xyzbc_type2))
+  endif
+  $(shell touch $(user_genser_type2))
+  userfile = $(subst .c,.o,$(user_genser_type2))
+  genser-switchkins-objs += $(userfile)
+  $(info !!!genser-switchkins:user_genser_type2=$(userfile))
+endif
+
 
 obj-m += pentakins.o
 pentakins-objs := emc/kinematics/pentakins.o
@@ -1024,9 +1070,45 @@ obj-m += xyzac-trt-kins.o
 xyzac-trt-kins-objs := emc/kinematics/xyzac-trt-kins.o
 xyzac-trt-kins-objs += emc/kinematics/kins_util.o
 
+obj-m += xyzac-trt-switchkins.o
+xyzac-trt-switchkins-objs := emc/kinematics/xyzac-trt-switchkins.o
+xyzac-trt-switchkins-objs += emc/kinematics/kins_util.o
+ifeq ($(origin user_xyzac_type2), undefined)
+  # use template:
+  xyzac-trt-switchkins-objs += emc/kinematics/switchtype2funcs.o
+else
+  # user specified file for switchkins_type==2:
+  # works with rtpreempt only (not rtai)
+  ifeq ("$(wildcard $(user_xyzac_type2))","")
+    $(error No such file: $(user_xyzbc_type2))
+  endif
+  $(shell touch $(user_xyzac_type2))
+  userfile = $(subst .c,.o,$(user_xyzac_type2))
+  xyzac-trt-switchkins-objs += $(userfile)
+  $(info !!!xyzac-trt-switchkins:user_xyzac_type2=$(userfile))
+endif
+
 obj-m += xyzbc-trt-kins.o
 xyzbc-trt-kins-objs := emc/kinematics/xyzbc-trt-kins.o
 xyzbc-trt-kins-objs += emc/kinematics/kins_util.o
+
+obj-m += xyzbc-trt-switchkins.o
+xyzbc-trt-switchkins-objs := emc/kinematics/xyzbc-trt-switchkins.o
+xyzbc-trt-switchkins-objs += emc/kinematics/kins_util.o
+ifeq ($(origin user_xyzbc_type2), undefined)
+  # use template:
+  xyzbc-trt-switchkins-objs += emc/kinematics/switchtype2funcs.o
+else
+  # user specified file for switchkins_type==2:
+  # works with rtpreempt only (not rtai)
+  ifeq ("$(wildcard $(user_xyzbc_type2))","")
+    $(error No such file: $(user_xyzbc_type2))
+  endif
+  $(shell touch $(user_xyzbc_type2))
+  userfile = $(subst .c,.o,$(user_xyzbc_type2))
+  xyzbc-trt-switchkins-objs += $(userfile)
+  $(info !!!xyzbc-trt-switchkins:user_xyzbc_type2=$(userfile))
+endif
 
 obj-m += rosekins.o
 rosekins-objs := emc/kinematics/rosekins.o
@@ -1057,7 +1139,6 @@ TORTOBJS = $(foreach file,$($(patsubst %.o,%,$(1))-objs), objects/rt$(file))
 ifeq ($(BUILD_SYS),uspace)
 EXTRA_CFLAGS += -fPIC -Os
 RTOBJS := $(sort $(foreach mod,$(obj-m),$(call TORTOBJS,$(mod))))
-
 RTDEPS := $(sort $(RTOBJS:.o=.d))
 
 modules: $(patsubst %.o,../rtlib/%.so,$(obj-m))
@@ -1146,13 +1227,19 @@ endif
 ../rtlib/corexykins$(MODULE_EXT): $(addprefix objects/rt,$(corexykins-objs))
 ../rtlib/lineardeltakins$(MODULE_EXT): $(addprefix objects/rt,$(lineardeltakins-objs))
 ../rtlib/genhexkins$(MODULE_EXT): $(addprefix objects/rt,$(genhexkins-objs))
+../rtlib/genhex-switchkins$(MODULE_EXT): $(addprefix objects/rt,$(genhex-switchkins-objs))
 ../rtlib/genserkins$(MODULE_EXT): $(addprefix objects/rt,$(genserkins-objs))
+../rtlib/genser-switchkins$(MODULE_EXT): $(addprefix objects/rt,$(genser-switchkins-objs))
 ../rtlib/pentakins$(MODULE_EXT): $(addprefix objects/rt,$(pentakins-objs))
 ../rtlib/pumakins$(MODULE_EXT): $(addprefix objects/rt,$(pumakins-objs))
 ../rtlib/scarakins$(MODULE_EXT): $(addprefix objects/rt,$(scarakins-objs))
 ../rtlib/rotarydeltakins$(MODULE_EXT): $(addprefix objects/rt,$(rotarydeltakins-objs))
+
 ../rtlib/xyzac-trt-kins$(MODULE_EXT): $(addprefix objects/rt,$(xyzac-trt-kins-objs))
+../rtlib/xyzac-trt-switchkins$(MODULE_EXT): $(addprefix objects/rt,$(xyzac-trt-switchkins-objs))
 ../rtlib/xyzbc-trt-kins$(MODULE_EXT): $(addprefix objects/rt,$(xyzbc-trt-kins-objs))
+../rtlib/xyzbc-trt-switchkins$(MODULE_EXT): $(addprefix objects/rt,$(xyzbc-trt-switchkins-objs))
+
 ../rtlib/rosekins$(MODULE_EXT): $(addprefix objects/rt,$(rosekins-objs))
 ../rtlib/scorbot-kins$(MODULE_EXT): $(addprefix objects/rt,$(scorbot-kins-objs))
 ../rtlib/hal_gm$(MODULE_EXT): $(addprefix objects/rt,$(hal_gm-objs))

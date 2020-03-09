@@ -8,11 +8,10 @@ net j2 joint.2.pos-fb hexagui.joint.2
 net j3 joint.3.pos-fb hexagui.joint.3
 net j4 joint.4.pos-fb hexagui.joint.4
 net j5 joint.5.pos-fb hexagui.joint.5
-#get tool position from emc
-net x-fb halui.axis.x.pos-feedback hexagui.axis.0
-net y-fb halui.axis.y.pos-feedback hexagui.axis.1
-net z-fb halui.axis.z.pos-feedback hexagui.axis.2
-net a-fb halui.axis.a.pos-feedback hexagui.axis.3
-net b-fb halui.axis.b.pos-feedback hexagui.axis.4
-net c-fb halui.axis.c.pos-feedback hexagui.axis.5
 
+net x-fb genhexkins.gui.x hexagui.axis.x
+net y-fb genhexkins.gui.y hexagui.axis.y
+net z-fb genhexkins.gui.z hexagui.axis.z
+net a-fb genhexkins.gui.a hexagui.axis.a
+net b-fb genhexkins.gui.b hexagui.axis.b
+net c-fb genhexkins.gui.c hexagui.axis.c
