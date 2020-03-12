@@ -983,6 +983,76 @@ static int probe_board(hm2_rpspi_t *board) {
 		board->llio.ioport_connector_name[2] = "P3";
 		board->llio.num_leds = 2;
 		board->llio.fpga_part_number = "xc6slx9tq144";
+	} else if (!memcmp(ident, "OMDSLX09", 8)) {
+		base = "hm2_omdslx09";
+		board->llio.num_ioport_connectors = 3;
+		board->llio.pins_per_connector = 24;
+		board->llio.ioport_connector_name[0] = "P1";
+		board->llio.ioport_connector_name[1] = "P2";
+		board->llio.ioport_connector_name[2] = "P3";
+		board->llio.num_leds = 2;
+		board->llio.fpga_part_number = "xc6slx9tq144";
+	} else if (!memcmp(ident, "SIMSLX09", 8)) {
+		base = "hm2_simslx09";
+		board->llio.num_ioport_connectors = 3;
+		board->llio.pins_per_connector = 24;
+		board->llio.ioport_connector_name[0] = "P1";
+		board->llio.ioport_connector_name[1] = "P2";
+		board->llio.ioport_connector_name[2] = "P3";
+		board->llio.num_leds = 1;
+		board->llio.fpga_part_number = "xc6slx9tq144";
+	} else if (!memcmp(ident, "QMTSLX16", 8)) {
+		base = "hm2_qmtslx16";
+		board->llio.num_ioport_connectors = 4;
+		board->llio.pins_per_connector = 24;
+		board->llio.ioport_connector_name[0] = "P1";
+		board->llio.ioport_connector_name[1] = "P2";
+		board->llio.ioport_connector_name[2] = "P3";
+		board->llio.ioport_connector_name[3] = "P4";
+		board->llio.num_leds = 1;
+		board->llio.fpga_part_number = "xc6slx16ftg256";
+	} else if (!memcmp(ident, "QMTSLX25", 8)) {
+		base = "hm2_qmtslx25";
+		board->llio.num_ioport_connectors = 4;
+		board->llio.pins_per_connector = 24;
+		board->llio.ioport_connector_name[0] = "P1";
+		board->llio.ioport_connector_name[1] = "P2";
+		board->llio.ioport_connector_name[2] = "P3";
+		board->llio.ioport_connector_name[3] = "P4";
+		board->llio.num_leds = 1;
+		board->llio.fpga_part_number = "xc6slx25ftg256";
+	} else if (!memcmp(ident, "QMTA035T", 8)) {
+		base = "hm2_qmta035t";
+		board->llio.num_ioport_connectors = 4;
+		board->llio.pins_per_connector = 24;
+		board->llio.ioport_connector_name[0] = "P1";
+		board->llio.ioport_connector_name[1] = "P2";
+		board->llio.ioport_connector_name[2] = "P3";
+		board->llio.ioport_connector_name[3] = "P4";
+		board->llio.num_leds = 1;
+		board->llio.fpga_part_number = "xc7a100tftg256";
+	} else if (!memcmp(ident, "QMTA100T", 8)) {
+		base = "hm2_qmta100t";
+		board->llio.num_ioport_connectors = 4;
+		board->llio.pins_per_connector = 24;
+		board->llio.ioport_connector_name[0] = "P1";
+		board->llio.ioport_connector_name[1] = "P2";
+		board->llio.ioport_connector_name[2] = "P3";
+		board->llio.ioport_connector_name[3] = "P4";
+		board->llio.num_leds = 1;
+		board->llio.fpga_part_number = "xc7a35tftg256";
+	} else if (!memcmp(ident, "SIMSLX25", 8)) {
+    	base = "hm2_simslx25";
+    	board->llio.num_ioport_connectors = 6;
+    	board->llio.pins_per_connector = 24;
+    	board->llio.ioport_connector_name[0] = "P1";
+    	board->llio.ioport_connector_name[1] = "P2";
+    	board->llio.ioport_connector_name[2] = "P3";
+		board->llio.ioport_connector_name[3] = "P4";
+		board->llio.ioport_connector_name[4] = "P5";
+		board->llio.ioport_connector_name[5] = "P6";
+    	board->llio.num_leds = 1;
+    	board->llio.fpga_part_number = "xc6slx25ftg256";
 	} else if(!memcmp(ident, "MESA7C80", 8)){
 		base = "hm2_7c80";
 		board->llio.num_ioport_connectors = 2;
